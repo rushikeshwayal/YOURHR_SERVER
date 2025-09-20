@@ -17,7 +17,6 @@ app.add_middleware(
 )
 app.include_router(job, prefix="/jobs", tags=["Jobs"])
 app.include_router(application, prefix="/applications", tags=["Applications"])
-app.include_router(user, prefix="/users", tags=["Users"])
 
 # Mangum handler for Vercel/AWS Lambda
 handler = Mangum(app)
