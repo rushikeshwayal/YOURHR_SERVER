@@ -7,10 +7,12 @@ from mangum import Mangum
 
 app = FastAPI()
 
-# Allow all origins for CORS (for dev and serverless)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=[
+        "http://localhost:5173",
+        "https://your-hr-client.vercel.app"
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
