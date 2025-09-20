@@ -6,7 +6,6 @@ from api.user import router as user
 from mangum import Mangum
 
 app = FastAPI()
-app = FastAPI()
 
 origins = [
     "http://localhost:5173",
