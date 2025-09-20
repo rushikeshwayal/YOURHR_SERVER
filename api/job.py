@@ -37,7 +37,7 @@ async def get_jobs(
         query = query.order_by(asc(order_column))
 
     result = await db.execute(query)
-    jobs = result.scalars().all()
+    jobs = (await result.scalars().all())
     return jobs
 
 @router.post("/", response_model=JobOut)
