@@ -1,39 +1,23 @@
-from fastapi import APIRouter, Depends, HTTPException, Query
-from sqlalchemy.ext.asyncio import AsyncSession
-from database import SessionLocal
-from models.job_vacancy import JobVacancy
-from schemas.job import JobCreate, JobOut
-
-from sqlalchemy.future import select
-from sqlalchemy import asc, desc
-
-router = APIRouter()
-
-async def get_db():
-    async with SessionLocal() as session:
-        yield session
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from database import async_session
 from models.job_vacancy import JobVacancy
-from schemas.job import JobOut
+from schemas.job import JobOut, JobCreate
 
 router = APIRouter()
 
-# Dependency for async session
 async def get_db():
     async with async_session() as session:
         yield session
 
-# GET all jobs
 @router.get("/", response_model=list[JobOut])
 async def get_all_jobs(db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(JobVacancy))
-    jobs = result.scalars().all()
+    async with db:  # optional, ensures proper context
+        result = await db.execute(select(JobVacancy))
+        jobs = result.scalars().all()
     return jobs
 
-# GET job by ID
 @router.get("/{job_id}", response_model=JobOut)
 async def get_job_by_id(job_id: int, db: AsyncSession = Depends(get_db)):
     result = await db.execute(select(JobVacancy).where(JobVacancy.job_id == job_id))
