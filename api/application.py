@@ -20,7 +20,7 @@ async def get_applications(db: AsyncSession = Depends(get_db)):
     applications = result.scalars().all()
     return applications
 
-@router.post("post/", response_model=ApplicationOut)
+@router.post("/post/", response_model=ApplicationOut)
 async def apply_job(application: ApplicationCreate, db: AsyncSession = Depends(get_db)):
     # optional: verify job_id exists
     result = await db.execute(
