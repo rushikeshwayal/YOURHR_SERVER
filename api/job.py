@@ -20,27 +20,28 @@ async def get_jobs(
     employment_type: str = Query(None),
     db: AsyncSession = Depends(get_db)
 ):
-    query = select(JobVacancy)
-    if job_id:
-        query = query.where(JobVacancy.job_id == job_id)
-    if employment_type:
-        query = query.where(JobVacancy.employment_type == employment_type)
+    async with db.begin():  # ensure proper transaction scope
+        query = select(JobVacancy)
+        if job_id:
+            query = query.where(JobVacancy.job_id == job_id)
+        if employment_type:
+            query = query.where(JobVacancy.employment_type == employment_type)
 
-    # dynamic ordering
-    order_column = getattr(JobVacancy, sort_by, None)
-    if not order_column:
-        raise HTTPException(status_code=400, detail="Invalid sort field")
+        order_column = getattr(JobVacancy, sort_by, None)
+        if not order_column:
+            raise HTTPException(status_code=400, detail="Invalid sort field")
 
-    if order.upper() == "DESC":
-        query = query.order_by(desc(order_column))
-    else:
-        query = query.order_by(asc(order_column))
+        if order.upper() == "DESC":
+            query = query.order_by(desc(order_column))
+        else:
+            query = query.order_by(asc(order_column))
 
-    result = await db.execute(query)
-    jobs = (await result.scalars().all())
+        result = await db.execute(query)
+        jobs = result.scalars().all()  # ok here, inside single await context
+
     return jobs
 
-@router.post("/", response_model=JobOut)
+@router.post("/post/", response_model=JobOut)
 async def post_job(job: JobCreate, db: AsyncSession = Depends(get_db)):
     new_job = JobVacancy(**job.dict())
     db.add(new_job)
