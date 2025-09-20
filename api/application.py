@@ -11,6 +11,15 @@ async def get_db():
     async with SessionLocal() as session:
         yield session
 
+    # GET all job applications
+@router.get("/", response_model=list[ApplicationOut])
+async def get_applications(db: AsyncSession = Depends(get_db)):
+    from sqlalchemy import select
+    query = select(JobApplyApplication)
+    result = await db.execute(query)
+    applications = result.scalars().all()
+    return applications
+
 @router.post("/", response_model=ApplicationOut)
 async def apply_job(application: ApplicationCreate, db: AsyncSession = Depends(get_db)):
     # optional: verify job_id exists
