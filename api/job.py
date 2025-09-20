@@ -14,12 +14,15 @@ async def get_db():
 
 @router.get("/", response_model=list[JobOut])
 async def get_jobs(
+    job_id: int = Query(None),
     sort_by: str = Query("salary_range"),
     order: str = Query("ASC"),
     employment_type: str = Query(None),
     db: AsyncSession = Depends(get_db)
 ):
     query = select(JobVacancy)
+    if job_id:
+        query = query.where(JobVacancy.job_id == job_id)
     if employment_type:
         query = query.where(JobVacancy.employment_type == employment_type)
 
