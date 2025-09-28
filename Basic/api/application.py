@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import SessionLocal
-from models.job_apply_application import JobApplyApplication
-from schemas.application import ApplicationCreate, ApplicationOut
+from Basic.models.job_apply_application import JobApplyApplication
+from Basic.schemas.application import ApplicationCreate, ApplicationOut
 from sqlalchemy.future import select
 
 router = APIRouter()

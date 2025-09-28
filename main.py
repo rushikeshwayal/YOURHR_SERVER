@@ -1,16 +1,32 @@
 from fastapi import FastAPI
-from api.application import router as application
+from Basic.api.application import router as application
 from fastapi.middleware.cors import CORSMiddleware
-from api.job import router as job
-from api.user import router as user
-from mangum import Mangum
+from database import engine, Base
+from Basic.api.job import router as job
+from Basic.api.user import router as user
+from InterviewQus.router import router as interview_router
+from SkillGap.router import router as skillgap_router
+# Import Resume model to register it with SQLAlchemy
+from Resume.model.model import Resume
+from Resume.api.resume import router as resume
+
 
 app = FastAPI()
+async def create_tables():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+
+@app.on_event("startup")
+async def on_startup():
+    await create_tables()
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
+        "http://localhost:3000",
+        "http://127.0.0.1:5173",
+        "http://127.0.0.1:3000",
         "https://your-hr-client.vercel.app"
     ],
     allow_credentials=True,
@@ -20,7 +36,9 @@ app.add_middleware(
 app.include_router(job, prefix="/jobs", tags=["Jobs"])
 app.include_router(application, prefix="/applications", tags=["Applications"])
 app.include_router(user, prefix="/users", tags=["Users"])
-
+app.include_router(resume, prefix="/resumes", tags=["Resumes"])
+app.include_router(interview_router, prefix="/jobs", tags=["Interview Questions"])
+app.include_router(skillgap_router, prefix="/jobs", tags=["Skill Gaps"])
 # Mangum handler for Vercel/AWS Lambda
 
 

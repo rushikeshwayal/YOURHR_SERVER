@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from database import async_session
-from models.job_vacancy import JobVacancy
-from schemas.job import JobOut, JobCreate
+from Basic.models.job_vacancy import JobVacancy
+from Basic.schemas.job import JobOut, JobCreate
 
 router = APIRouter()
 
