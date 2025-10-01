@@ -9,6 +9,7 @@ from SkillGap.router import router as skillgap_router
 # Import Resume model to register it with SQLAlchemy
 from Resume.model.model import Resume
 from Resume.api.resume import router as resume
+from Community.api.api import router as community_router
 
 
 app = FastAPI()
@@ -39,6 +40,7 @@ app.include_router(user, prefix="/users", tags=["Users"])
 app.include_router(resume, prefix="/resumes", tags=["Resumes"])
 app.include_router(interview_router, prefix="/jobs", tags=["Interview Questions"])
 app.include_router(skillgap_router, prefix="/jobs", tags=["Skill Gaps"])
+app.include_router(community_router, prefix="/community", tags=["Community"])
 # Mangum handler for Vercel/AWS Lambda
 
 
