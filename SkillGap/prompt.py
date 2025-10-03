@@ -25,6 +25,8 @@ Give the output strictly in JSON array format as mentioned below:
     ,
     ...
 ]
+add 
+Percentage skill gap for all skill gaps: 'percentage_skill_gap'
 """
 
     @staticmethod
