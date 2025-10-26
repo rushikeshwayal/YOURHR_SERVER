@@ -12,12 +12,6 @@ router = APIRouter()
 # ✅ Apply for a Job
 @router.post("/post/applications", response_model=JobApplicationResponse)
 async def apply_for_job(application: JobApplicationCreate, db: AsyncSession = Depends(get_db)):
-    # Check if job exists
-    result = await db.execute(select(JobApplication).where(JobApplication.id == application.company_job_id))
-    job = result.scalar_one_or_none()
-    if not job:
-        raise HTTPException(status_code=404, detail="Job not found")
-
     new_application = JobApplication(
         email=application.email,
         resume_link=str(application.resume_link),
@@ -29,6 +23,7 @@ async def apply_for_job(application: JobApplicationCreate, db: AsyncSession = De
     await db.commit()
     await db.refresh(new_application)
     return new_application
+
 
 
 # ✅ Get all applications
