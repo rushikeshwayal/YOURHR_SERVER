@@ -11,6 +11,9 @@ from Resume.model.model import Resume
 from Resume.api.resume import router as resume
 from Community.api.api import router as community_router
 from CareerPath.router import router as careerpath_router
+from Company.api.api import router as company_router
+from Company_Job.api.api import router as company_job_router
+from Company_job_application.api.api import router as company_application_router
 
 
 app = FastAPI()
@@ -43,5 +46,6 @@ app.include_router(interview_router, prefix="/jobs", tags=["Interview Questions"
 app.include_router(skillgap_router, prefix="/jobs", tags=["Skill Gaps"])
 app.include_router(community_router, prefix="/community", tags=["Community"])
 app.include_router(careerpath_router, prefix="/career-path", tags=["Career Path"])
-
-
+app.include_router(company_router, prefix="/companies", tags=["Companies"])
+app.include_router(company_job_router, prefix="/company-jobs", tags=["Company Jobs"])
+app.include_router(company_application_router, prefix="/company-applications", tags=["Company Job Applications"])
