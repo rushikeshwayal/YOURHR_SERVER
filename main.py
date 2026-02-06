@@ -14,6 +14,8 @@ from CareerPath.router import router as careerpath_router
 from Company.api.api import router as company_router
 from Company_Job.api.api import router as company_job_router
 from Company_job_application.api.api import router as company_application_router
+from ML.ATS.api.ats import router as ats_router
+from ML.ResumeStrength.api.resume_strength import router as resume_strength_router
 
 
 app = FastAPI()
@@ -49,3 +51,5 @@ app.include_router(careerpath_router, prefix="/career-path", tags=["Career Path"
 app.include_router(company_router, prefix="/companies", tags=["Companies"])
 app.include_router(company_job_router, prefix="/company-jobs", tags=["Company Jobs"])
 app.include_router(company_application_router, prefix="/company-applications", tags=["Company Job Applications"])
+app.include_router(ats_router, prefix="/ats", tags=["ATS"])
+app.include_router(resume_strength_router, prefix="/resume-strength", tags=["Resume Strength"])
